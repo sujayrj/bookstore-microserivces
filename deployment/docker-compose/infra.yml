@@ -22,5 +22,47 @@ services:
         limits:
           memory: 800m
 
+  order-db:
+    container_name: order-db
+    image: postgres:16-alpine
+    ports:
+      - "25432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - order_db_data:/var/lib/postgresql/data
+      - ./order_db_init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 800m
+
+  bookstore-rabbitmq:
+    container_name: bookstore-rabbitmq
+    image: rabbitmq:3.12.11-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PWD=guest
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 500m
+
 volumes:
   catalog_db_data:
+  order_db_data:

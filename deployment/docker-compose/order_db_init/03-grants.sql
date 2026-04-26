@@ -1,0 +1,1 @@
+GRANT ALL PRIVILEGES ON DATABASE order_db TO sujay;
