@@ -1,0 +1,19 @@
+name: 'bookstore-microservices'
+services:
+  catalog-service:
+    image: jeppu/bookstore-catalog-service
+    container_name: catalog-service
+    ports:
+      - "8081:8081"
+    environment:
+      - APP_PORT=8081
+      - DB_URL=jdbc:postgresql://catalog-db:5432/catalog_db
+      - DB_USER=sujay
+      - DB_PASSWORD=password
+    depends_on:
+      catalog-db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 800m
