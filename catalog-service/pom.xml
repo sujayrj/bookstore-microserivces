@@ -17,6 +17,7 @@
     <properties>
         <java.version>21</java.version>
         <spotless.version>2.46.1</spotless.version>
+        <dockerImageName>jeppu/bookstore-${project.artifactId}</dockerImageName>
     </properties>
     <dependencies>
         <dependency>
@@ -134,6 +135,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <image>
+                        <name>${dockerImageName}</name>
+                        <builder>dashaun/builder:tiny</builder>
+                        <publish>false</publish>
+                    </image>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
